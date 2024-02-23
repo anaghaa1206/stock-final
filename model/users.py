@@ -8,6 +8,11 @@ from sqlalchemy.exc import IntegrityError
 from werkzeug.security import generate_password_hash, check_password_hash
 ''' Tutorial: https://www.sqlalchemy.org/library.html#tutorials, try to get into Python shell and follow along '''
 # Define the Post class to manage actions in 'posts' table,  with a relationship to 'users' table
+# model/users.py
+
+# ... Your existing imports ...
+
+# Define the Post class to manage actions in 'posts' table, with a relationship to 'users' table
 class Post(db.Model):
     __tablename__ = 'posts'
     # Define the Stock schema
@@ -15,16 +20,22 @@ class Post(db.Model):
     company_name = db.Column(db.String(100), nullable=False)
     shares = db.Column(db.Integer, nullable=False)
     purchase_price = db.Column(db.Float, nullable=False)
-    current_price = db.Column(db.Float, nullable=True)
+    current_price = db.Column(db.Float, nullable=True)  # Make sure this column is defined in your schema
     userID = db.Column(db.Integer, db.ForeignKey('users.id'))
-    def __init__(self, company_name, shares, purchase_price, userID, note=None):  # note is optional
+    
+    def __init__(self, company_name, shares, purchase_price, userID, current_price=None, note=None):  # current_price is optional
         self.company_name = company_name
         self.shares = shares
         self.purchase_price = purchase_price
         self.userID = userID
+        self.current_price = current_price  # This will be None if not provided
         self.note = note  # This will be None if not provided
+
     def __repr__(self):
-        return f"Post(Stock)({self.id}, {self.company_name}, {self.shares}, {self.purchase_price}, {self.userID})"
+        return f"<Post(Stock)({self.id}, {self.company_name}, {self.shares}, {self.purchase_price}, {self.current_price}, {self.userID})>"
+
+# ... Rest of your file ...
+
     # CRUD operations for the Stock would be similar to the original Post model, adjusted for the stock attributes
     # CRUD operations for the Stock would be similar to the original Post model, adjusted for the stock attributes
 # Define the User class to manage actions in the 'users' table
